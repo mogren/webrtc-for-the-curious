@@ -38,7 +38,7 @@ WebRTCは素晴らしい技術ですが、使いこなすのは難しいもの�
 
 本書は、[GitHub](https://github.com/webrtc-for-the-curious/webrtc-for-the-curious)および[WebRTCforTheCurious.com](https://webrtcforthecurious.com)で公開されています。
 この本は、あなたが最適だと思う方法で使用できるようにライセンスされています。現在のバージョンの本を[ePub](https://webrtcforthecurious.com/docs/webrtc-for-the-curious.epub)でダウンロードすることもできます。
-または[PDF](https://webrtcforthecurious.com/docs/webrtc-for-the-curious.pdf)ファイルとしてダウンロードすることもできます。
+または[PDF](https://webrtcforthecurious.com/docs/webrtc-for-the-curious-ja.pdf)ファイルとしてダウンロードすることもできます。
 
 この本は、個人が個人のために書いたものです。ベンダーにとらわれないため、利益相反となるような推奨はしません。
 
