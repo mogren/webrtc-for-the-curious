@@ -18,6 +18,12 @@ jobs:
       - run: |
           echo "FILELIST=\"content/_index.md\" $(printf '"%s" ' content/docs/*.md)" >> $GITHUB_ENV
           echo "FILELIST_SV=\"content.sv/_index.md\" $(printf '"%s" ' content.sv/docs/*.md)" >> $GITHUB_ENV
+          echo "FILELIST_JA=\"content.ja/_index.md\" $(printf '"%s" ' content.ja/docs/*.md)" >> $GITHUB_ENV
+
+      - run: |
+          apt install texlive-base
+          sudo tlmgr install ctex
+          sudo apt install fonts-noto-cjk
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
@@ -28,15 +34,19 @@ jobs:
       - name: Build
         run: hugo --minify
 
-      - uses: docker://pandoc/latex:2.12
+      - uses: docker://pandoc/latex:2.16.2
         with:
           args: --output=public/docs/webrtc-for-the-curious.pdf --resource-path=.:./content:./content/docs/images --toc ${{ env.FILELIST }} .pandoc/metadata_en.txt
 
-      - uses: docker://pandoc/latex:2.12
+      - uses: docker://pandoc/latex:2.16.2
         with:
           args: --output=public/docs/webrtc-for-the-curious-sv.pdf --resource-path=.:./content.sv:./content.sv/docs/images --toc ${{ env.FILELIST_SV }} .pandoc/metadata_sv.txt
 
-      - uses: docker://pandoc/latex:2.12
+      - uses: docker://pandoc/latex:2.16.2
+        with:
+          args: --pdf-engine=xelatex -V CJKmainfont="Noto Sans JP" --output=public/docs/webrtc-for-the-curious-ja.pdf --resource-path=.:./content.ja:./content.ja/docs/images --toc ${{ env.FILELIST_JA }} - .pandoc/metadata_ja.txt
+
+      - uses: docker://pandoc/latex:2.16.2
         with:
           args: --output=public/docs/webrtc-for-the-curious.epub --resource-path=.:./content:./content/images --toc ${{ env.FILELIST }} .pandoc/metadata_en.txt
 
