@@ -1,7 +1,0 @@
----
-title: 好奇心旺盛な人のためのWebRTC
-author: https://github.com/webrtc-for-the-curious/webrtc-for-the-curious
-rights: Creative Commons Zero v1.0 Universal
-language: ja
-cover-image: content.ja/docs/images/epub-cover.png
-...
