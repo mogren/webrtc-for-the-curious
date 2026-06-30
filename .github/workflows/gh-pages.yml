@@ -10,12 +10,14 @@ jobs:
     name: Publish Website
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
         with:
           submodules: true  # Fetch Hugo themes (true OR recursive)
           fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
 
-      - run: |
+      - name: Generate Chapter File Lists
+        run: |
           echo "FILELIST=\"content/_index.md\" $(printf '"%s" ' content/docs/*.md)" >> $GITHUB_ENV
           echo "FILELIST_SV=\"content.sv/_index.md\" $(printf '"%s" ' content.sv/docs/*.md)" >> $GITHUB_ENV
           echo "FILELIST_RU=\"content.ru/_index.md\" $(printf '"%s" ' content.ru/docs/*.md)" >> $GITHUB_ENV
@@ -26,22 +28,26 @@ jobs:
           hugo-version: '0.163.3'
           extended: true
 
-      - name: Build
+      - name: Build Site
         run: hugo --minify
 
-      - uses: docker://pandoc/latex:3.8
+      - name: Build English PDF
+        uses: docker://pandoc/latex:3.8
         with:
           args: --output=public/docs/webrtc-for-the-curious.pdf --resource-path=.:./content:./content/docs/images --toc ${{ env.FILELIST }} .pandoc/metadata_pdf_en.txt
 
-      - uses: docker://pandoc/latex:3.8
+      - name: Build English EPUB
+        uses: docker://pandoc/latex:3.8
         with:
           args: --output=public/docs/webrtc-for-the-curious.epub --resource-path=.:./content:./content/images --toc ${{ env.FILELIST }} .pandoc/metadata_en.txt
 
-      - uses: docker://pandoc/latex:3.8
+      - name: Build Swedish PDF
+        uses: docker://pandoc/latex:3.8
         with:
           args: --output=public/docs/webrtc-for-the-curious-sv.pdf --resource-path=.:./content.sv:./content.sv/docs/images --toc ${{ env.FILELIST_SV }} .pandoc/metadata_pdf_sv.txt
 
-      - uses: docker://pandoc/latex:3.8
+      - name: Build Swedish EPUB
+        uses: docker://pandoc/latex:3.8
         with:
           args: --output=public/docs/webrtc-for-the-curious-sv.epub --resource-path=.:./content.sv:./content.sv/docs/images --toc ${{ env.FILELIST_SV }} .pandoc/metadata_sv.txt
 
@@ -53,7 +59,8 @@ jobs:
             pandoc/latex:3.8 \
             -c "apk add --no-cache font-dejavu && pandoc --pdf-engine=xelatex --output=public/docs/webrtc-for-the-curious-ru.pdf --resource-path=.:./content.ru:./content.ru/docs/images --toc $FILELIST_RU .pandoc/metadata_pdf_ru.txt"
 
-      - uses: docker://pandoc/latex:3.8
+      - name: Build Russian EPUB
+        uses: docker://pandoc/latex:3.8
         with:
           args: --output=public/docs/webrtc-for-the-curious-ru.epub --resource-path=.:./content.ru:./content.ru/docs/images --toc ${{ env.FILELIST_RU }} .pandoc/metadata_ru.txt
 
